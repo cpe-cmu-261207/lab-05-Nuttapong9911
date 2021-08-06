@@ -2,6 +2,9 @@ import React from 'react';
 import { useState } from 'react'
 import Task from './Task'
 import './App.css';
+import InputBox from './InputBox'
+import AddButton from './AddButton'
+
 
 type TaskData = {
   id: number;
@@ -19,6 +22,7 @@ function App() {
     if(ev.key === 'Enter'){
       addTask(curTask)
       ev.currentTarget.value = ''
+      setCurTask('')
     }
   }
 
@@ -65,9 +69,9 @@ function App() {
 
         {/* task input and add button */}
         <div className='flex space-x-1'>
-          <input className='border border-gray-400 w-full text-2xl'
-            onKeyDown={onKeyDownCallback} onChange={onChangeCallback} type="text"></input>
-          <button className='border border-gray-400 w-8 font-bold' onClick={() => addTask(curTask)}>+</button>
+          <InputBox keyDown = {onKeyDownCallback} change={onChangeCallback}/>
+          <AddButton add = {addTask} task = {curTask} />
+
           
         </div>
         <div className='taskList'>
