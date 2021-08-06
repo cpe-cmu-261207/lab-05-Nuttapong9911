@@ -36,3 +36,30 @@
     transform: rotate(360deg);
   }
 }
+
+.taskList{
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.taskDiv .btn{
+  display: none;
+}
+
+.taskDiv:hover .btn{
+  display: inline;
+}
+
+.doneTaskList{
+  display: flex;
+  flex-direction: column-reverse;
+  text-decoration: line-through;
+}
+
+.doneTaskList .btn{
+  display: none;
+}
+
+.doneTaskList:hover .btn{
+  display: none;
+}

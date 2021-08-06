@@ -1,10 +1,54 @@
 import React from 'react';
 import { useState } from 'react'
+import Task from './Task'
+import './App.css';
+
+type TaskData = {
+  id: number;
+  name: string;
+}
 
 function App() {
 
+  const [curTask, setCurTask] = useState<string>('')
+  const [tasks, setTasks] = useState<TaskData[]>([])
+  const [doneTasks, setDoneTasks] = useState<TaskData[]>([])
+
   const onKeyDownCallback = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     /* check pressing enter key here */
+    if(ev.key === 'Enter'){
+      addTask(curTask)
+      ev.currentTarget.value = ''
+    }
+  }
+
+  const onChangeCallback = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    setCurTask(ev.target.value)
+  }
+
+
+  const addTask = (taskName: string) => {
+    if(curTask){
+      const newId = (new Date()).getTime()
+      const newTasks = [...tasks, {id: newId, name: taskName}]
+      setTasks(newTasks)
+    }else{
+      alert("Task cannot be empty!")
+    }
+    
+    
+  }
+
+  const deleteTask = (id: number) => {
+    const newTasks = tasks.filter(x => x.id !== id)
+    setTasks(newTasks)
+  }
+
+  const doTask = (taskName: string, taskId : number) => {
+    const newTasks = tasks.filter(x => x.id !== taskId)
+    setTasks(newTasks)
+    const doingTasks = [...doneTasks, {id: taskId, name: taskName}]
+    setDoneTasks(doingTasks)
   }
 
   return (
@@ -13,49 +57,31 @@ function App() {
       {/* header section */}
       <div className='flex justify-center items-end space-x-2'>
         <span className='text-center italic my-2 text-2xl'>Minimal Todo List </span>
-        <span className='text-gray-400 italic my-2 text-xl'>by ...</span>
+        <span className='text-gray-400 italic my-2 text-xl'>by Nuttapong Boonsala 630610744</span>
       </div>
 
       {/* todo section */}
-      <div className='mx-auto max-w-4xl'>
+      <div className='mx-auto max-w-2xl'>
 
         {/* task input and add button */}
         <div className='flex space-x-1'>
           <input className='border border-gray-400 w-full text-2xl'
-            onKeyDown={onKeyDownCallback} ></input>
-          <button className='border border-gray-400 w-8 font-bold'>+</button>
+            onKeyDown={onKeyDownCallback} onChange={onChangeCallback} type="text"></input>
+          <button className='border border-gray-400 w-8 font-bold' onClick={() => addTask(curTask)}>+</button>
+          
         </div>
+        <div className='taskList'>
+          {tasks.map( x => <Task id={x.id} name={x.name} deleteFn={deleteTask} doFn={doTask}/>)}
+       </div>
+       <div className='doneTaskList'>
+          {doneTasks.map( x => <Task id={x.id} name={x.name} deleteFn={deleteTask} doFn={doTask}/>)}
+       </div>
+        
 
-        {/* tasks section */}
-        <div>
-          {/* task example */}
-          {/* Please convert this into a task component */}
-          <div
-            className="flex justify-between h-8 items-center py-6 border-b"
-          >
-            <span className="text-2xl"> I am a task </span>
-            <div className="flex space-x-1 items-center">
-              <button className="bg-green-400 w-24 text-2xl" >Done</button>
-              <button className="bg-red-400 w-24 text-2xl" >Delete</button>
-            </div>
-          </div>
-
-          {/* another task example */}
-          <div
-            className="flex justify-between h-8 items-center py-6 border-b"
-          >
-            <span className="text-2xl"> I am another task </span>
-            <div className="flex space-x-1 items-center">
-              <button className="bg-green-400 w-24 text-2xl" >Done</button>
-              <button className="bg-red-400 w-24 text-2xl" >Delete</button>
-            </div>
-          </div>
-
-        </div>
       </div>
 
       {/* footer section */}
-      <p className='text-center text-gray-400'> ... </p>
+      <p className='text-center text-gray-400'> Copyright © 2021 </p>
     </div>
   );
 }
